@@ -1,0 +1,83 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xurl}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\newcommand{\EX}{\mathit{EX}}
+\newcommand{\MKT}{\mathit{MKT}}
+\newcommand{\SMB}{\mathit{SMB}}
+\newcommand{\HML}{\mathit{HML}}
+\newcommand{\RMW}{\mathit{RMW}}
+\newcommand{\CMA}{\mathit{CMA}}
+\newcommand{\MOM}{\mathit{MOM}}
+\newcommand{\RF}{\mathit{RF}}
+\newcommand{\ME}{\mathit{ME}}
+\newcommand{\BE}{\mathit{BE}}
+\newcommand{\OP}{\mathit{OP}}
+\newcommand{\INV}{\mathit{INV}}
+\newcommand{\TA}{\mathit{TA}}
+\newcommand{\PT}{\mathit{Past24}}
+
+\begin{document}
+\begin{center}{\large\bfseries Variable and Factor Definitions}\end{center}
+
+All returns are monthly, in percent.
+
+\section*{Asset returns}
+\begin{align}
+R_t &= 100\left(\frac{P_t}{P_{t-1}}-1\right) && P_t:\ \text{month-end adjusted close} \\
+\EX^{QQQ}_t &= R^{QQQ}_t-\RF_t, \qquad \EX^{SPY}_t = R^{SPY}_t-\RF_t \\
+\mathit{SPREAD}_t &= R^{QQQ}_t-R^{SPY}_t
+\end{align}
+
+\section*{Fama--French factors}
+Portfolio return: $r_{p,t}=\sum_{i\in p} w_{i,t}\,r_{i,t}$, \quad $w_{i,t}=\ME_{i,t-1}/\sum_{j\in p}\ME_{j,t-1}$.
+
+\textbf{Sorting variables} (portfolios formed each June $t$, held July $t$ -- June $t+1$):
+\begin{align}
+\ME &= \text{price}\times\text{shares outstanding} && \text{NYSE median} \\
+\BE/\ME &= \BE_{t-1}\,/\,\ME_{\text{Dec}\,t-1} && \text{NYSE 30th/70th pct.} \\
+\OP &= \frac{\text{Rev}-\text{COGS}-\text{Int}-\text{SG\&A}}{\BE+\text{Minority int.}} && \text{NYSE 30th/70th pct.} \\
+\INV &= \frac{\TA_{t-1}-\TA_{t-2}}{\TA_{t-2}} && \text{NYSE 30th/70th pct.}
+\end{align}
+$S/B$: small/big;\quad $V/N/G$: value/neutral/growth;\quad $R/W$: robust/weak;\\ $C/A$: conservative/aggressive.
+
+\begin{align}
+\MKT_t &= R^m_t-\RF_t && R^m:\ \text{CRSP VW market} \\
+\SMB_{B/M} &= \tfrac13(SV+SN+SG)-\tfrac13(BV+BN+BG) \\
+\SMB_{OP} &= \tfrac13(SR+SN+SW)-\tfrac13(BR+BN+BW) \\
+\SMB_{INV} &= \tfrac13(SC+SN+SA)-\tfrac13(BC+BN+BA) \\
+\SMB &= \tfrac13\left(\SMB_{B/M}+\SMB_{OP}+\SMB_{INV}\right) \\
+\HML &= \tfrac12(SV+BV)-\tfrac12(SG+BG) \\
+\RMW &= \tfrac12(SR+BR)-\tfrac12(SW+BW) \\
+\CMA &= \tfrac12(SC+BC)-\tfrac12(SA+BA) \\
+r^{\text{prior}}_{i,t} &= \textstyle\prod_{s=t-12}^{t-2}(1+r_{i,s})-1 && \text{monthly, NYSE 30/70 pct.} \\
+\MOM_t &= \tfrac12(SH+BH)-\tfrac12(SL+BL) && H/L:\ \text{high/low prior ret.}
+\end{align}
+$\RF_t$: one-month Treasury bill return.
+
+\section*{Bear-market state}
+\begin{align}
+\PT_t &= 100\left[\prod_{s=t-24}^{t-1}\left(1+\frac{\MKT_s+\RF_s}{100}\right)-1\right] \\
+\mathit{Crisis}_t &= -\,\frac{\PT_t-\overline{\PT}}{s_{\PT}} && \text{larger}=\text{more bearish}
+\end{align}
+
+\section*{Q4 model}
+\begin{equation}
+\begin{split}
+\EX^{QQQ}_t=\alpha&+\lambda\,\mathit{Crisis}_t+\beta_1\MKT^c_t+\delta\,(\mathit{Crisis}_t\times\MKT^c_t)\\
+&+\beta_2\SMB_t+\beta_3\HML_t+\beta_4\RMW_t+\beta_5\CMA_t+\varepsilon_t
+\end{split}
+\end{equation}
+$\MKT^c_t=\MKT_t-\overline{\MKT}$, \quad $H_0:\delta=0$.
+
+\begin{thebibliography}{9}\small
+\bibitem{c97} Carhart, M. M. (1997). On persistence in mutual fund performance. \emph{Journal of Finance}, 52(1), 57--82.
+\bibitem{dm16} Daniel, K., \& Moskowitz, T. J. (2016). Momentum crashes. \emph{Journal of Financial Economics}, 122(2), 221--247.
+\bibitem{ff93} Fama, E. F., \& French, K. R. (1993). Common risk factors in the returns on stocks and bonds. \emph{Journal of Financial Economics}, 33(1), 3--56.
+\bibitem{ff15} Fama, E. F., \& French, K. R. (2015). A five-factor asset pricing model. \emph{Journal of Financial Economics}, 116(1), 1--22.
+\bibitem{kf} French, K. R. Data Library. \url{https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html}
+\end{thebibliography}
+\end{document}

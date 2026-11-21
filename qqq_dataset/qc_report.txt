@@ -1,0 +1,11 @@
+Dropped partial month 202611 from ETF prices.
+Sample: 199905 to 202609 (329 months). First return 1999-05: Yahoo's first QQQ month-end price is 1999-04 (no March 1999 bar).
+Calendar continuity: 329 expected, 329 present -> OK
+Missing values: 0
+Sanity: cor(EX_SPY, MKT) = 0.9888; sd ratio = 0.966 (workflow expects ~0.99 / ~1)
+Sanity: cor(EX_QQQ, TECH) = 0.9819 (QQQ is tech-heavy, expect high)
+R_QQQ: mean 1.082%  sd 6.725%  min -26.21% (200102)  max 24.32% (199912)
+R_SPY: mean 0.773%  sd 4.354%  min -16.52% (200810)  max 12.70% (202004)
+Flag: exactly-zero monthly returns (likely stale Yahoo price): R_SPY 201011
+Crisis months: 63 of 329
+Train/test split (70/30 by time): train 199905-201806, test 201807-202609

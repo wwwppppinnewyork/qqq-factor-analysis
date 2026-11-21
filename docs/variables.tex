@@ -1,0 +1,73 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,array}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xurl}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\renewcommand{\arraystretch}{1.3}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand{\EX}{\mathit{EX}}
+\newcommand{\MKT}{\mathit{MKT}}
+\newcommand{\RF}{\mathit{RF}}
+\newcommand{\PT}{\mathit{Past24}}
+
+\begin{document}
+\begin{center}{\large\bfseries Variables Used in the Analysis}\end{center}
+All returns are monthly, in percent. Sample: May 1999 -- September 2026.
+
+\section*{A. Downloaded factors (used as provided)}
+Source: Kenneth French Data Library \cite{kf}. Each factor is the monthly return of a long--short portfolio.
+
+\begin{center}
+\begin{tabular}{@{}lP{3.6cm}P{7.4cm}@{}}
+\toprule
+Symbol & Name & Meaning \\
+\midrule
+$\MKT$ & Market (Mkt$-$RF) & Value-weighted return of all U.S. stocks minus the T-bill rate \cite{ff93} \\
+$\mathit{SMB}$ & Small Minus Big & Small-cap stocks minus large-cap stocks (size) \cite{ff93,ff15} \\
+$\mathit{HML}$ & High Minus Low & High book-to-market (value) minus low book-to-market (growth) stocks \cite{ff93} \\
+$\mathit{RMW}$ & Robust Minus Weak & High minus low operating-profitability stocks \cite{ff15} \\
+$\mathit{CMA}$ & Conservative Minus Aggressive & Low minus high asset-growth (investment) stocks \cite{ff15} \\
+$\mathit{MOM}$ & Momentum & Past 12-month winners minus losers, skipping the last month \cite{c97} \\
+$\RF$ & Risk-free rate & One-month U.S. Treasury bill return \\
+$R^{\mathit{HiTec}}$ & High-tech industry & Value-weighted return of the HiTec industry portfolio (10-industry classification) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{B. Variables we compute}
+\begin{align}
+R_t &= 100\left(\frac{P_t}{P_{t-1}}-1\right)
+  && P_t:\ \text{month-end adjusted close} \\
+\EX^{QQQ}_t &= R^{QQQ}_t-\RF_t
+  && \text{response variable} \\
+\EX^{SPY}_t &= R^{SPY}_t-\RF_t \\
+\mathit{SPREAD}_t &= R^{QQQ}_t-R^{SPY}_t
+  && \text{response for Q3} \\
+\PT_t &= 100\left[\prod_{s=t-24}^{t-1}\left(1+\frac{\MKT_s+\RF_s}{100}\right)-1\right]
+  && \text{window of \cite{dm16}} \\
+\mathit{Crisis}_t &= -\,\frac{\PT_t-\overline{\PT}}{s_{\PT}}
+  && \text{z-score; larger = more bearish} \\
+\MKT^c_t &= \MKT_t-\overline{\MKT}
+  && \text{centered market factor}
+\end{align}
+$\overline{x}$ and $s_x$ denote the sample mean and standard deviation. $\PT_t$ uses months up to $t-1$ only.
+
+\section*{C. Q4 model}
+\begin{equation}
+\begin{split}
+\EX^{QQQ}_t=\alpha&+\lambda\,\mathit{Crisis}_t+\beta_1\MKT^c_t+\delta\,(\mathit{Crisis}_t\times\MKT^c_t)\\
+&+\beta_2\mathit{SMB}_t+\beta_3\mathit{HML}_t+\beta_4\mathit{RMW}_t+\beta_5\mathit{CMA}_t+\varepsilon_t,
+\qquad H_0:\delta=0
+\end{split}
+\end{equation}
+
+\begin{thebibliography}{9}\small
+\bibitem{c97} Carhart, M. M. (1997). On persistence in mutual fund performance. \emph{Journal of Finance}, 52(1), 57--82.
+\bibitem{dm16} Daniel, K., \& Moskowitz, T. J. (2016). Momentum crashes. \emph{Journal of Financial Economics}, 122(2), 221--247.
+\bibitem{ff93} Fama, E. F., \& French, K. R. (1993). Common risk factors in the returns on stocks and bonds. \emph{Journal of Financial Economics}, 33(1), 3--56.
+\bibitem{ff15} Fama, E. F., \& French, K. R. (2015). A five-factor asset pricing model. \emph{Journal of Financial Economics}, 116(1), 1--22.
+\bibitem{kf} French, K. R. Data Library. \url{https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html}
+\end{thebibliography}
+\end{document}

@@ -1,0 +1,133 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,booktabs}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xurl}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\newcommand{\MKT}{\mathit{MKT}}
+\newcommand{\SMB}{\mathit{SMB}}
+\newcommand{\HML}{\mathit{HML}}
+\newcommand{\RMW}{\mathit{RMW}}
+\newcommand{\CMA}{\mathit{CMA}}
+\newcommand{\MOM}{\mathit{MOM}}
+\newcommand{\RF}{\mathit{RF}}
+\newcommand{\ME}{\mathit{ME}}
+\newcommand{\BE}{\mathit{BE}}
+\newcommand{\OP}{\mathit{OP}}
+\newcommand{\INV}{\mathit{INV}}
+\newcommand{\TA}{\mathit{TA}}
+
+\begin{document}
+\begin{center}{\large\bfseries Construction of the Fama--French Five Factors}\end{center}
+
+Five factors: $\MKT,\ \SMB,\ \HML,\ \RMW,\ \CMA$ \cite{ff15}. We add $\MOM$ \cite{c97} as a sixth factor in model M4.
+Factor returns are downloaded from the Kenneth French Data Library \cite{kf}; the construction below follows \cite{ff15,kf}.
+
+\section*{Abbreviations}
+\begin{center}\footnotesize
+\begin{tabular}{ll@{\qquad}ll}
+\toprule
+$\MKT$ & Market excess return & $\ME$ & Market equity (market capitalization) \\
+$\SMB$ & Small Minus Big (size) & $\BE$ & Book equity \\
+$\HML$ & High Minus Low (value) & $\BE/\ME$ & Book-to-market ratio \\
+$\RMW$ & Robust Minus Weak & $\OP$ & Operating profitability \\
+$\CMA$ & Conservative Minus Aggressive & $\INV$ & Investment (asset growth) \\
+$\MOM$ & Momentum (winners minus losers) & $\TA$ & Total assets \\
+$\RF$ & Risk-free rate (1-month T-bill) & FY & Fiscal year \\
+$R^m$ & Market return & COGS & Cost of goods sold \\
+CRSP & Ctr.\ for Research in Security Prices & SG\&A & Selling, general \& admin.\ expense \\
+NYSE & New York Stock Exchange & Rev & Revenue \\
+AMEX & American Stock Exchange & $S$ / $B$ & Small / Big (size groups) \\
+NASDAQ & NASDAQ Stock Market & $V$ / $N$ / $G$ & Value / Neutral / Growth \\
+ & & $R$ / $W$ & Robust / Weak \\
+ & & $C$ / $A$ & Conservative / Aggressive \\
+ & & $H$ / $L$ & High / Low prior return \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{Step 1. Stock universe and timing \normalfont\small\cite{kf}}
+\begin{itemize}
+  \item Universe: CRSP common stocks (share codes 10, 11) listed on NYSE, AMEX, NASDAQ.
+  \item Portfolios formed at the end of June of year $t$; held from July $t$ to June $t+1$.
+  \item Portfolio returns are value-weighted:
+  \begin{equation}
+    r_{p,t}=\sum_{i\in p} w_{i,t}\,r_{i,t},\qquad w_{i,t}=\frac{\ME_{i,t-1}}{\sum_{j\in p}\ME_{j,t-1}}
+  \end{equation}
+\end{itemize}
+
+\section*{Step 2. Sorting variables \normalfont\small\cite{ff15,kf}}
+\begin{align}
+\ME_i &= \text{price}_i\times\text{shares outstanding}_i && \text{end of June } t\\
+(\BE/\ME)_i &= \frac{\BE_{i,\,\text{FY }t-1}}{\ME_{i,\,\text{Dec }t-1}}\\
+\OP_i &= \frac{\text{Rev}-\text{COGS}-\text{Interest expense}-\text{SG\&A}}{\BE+\text{Minority interest}} && \text{FY } t-1\\
+\INV_i &= \frac{\TA_{i,t-1}-\TA_{i,t-2}}{\TA_{i,t-2}}
+\end{align}
+
+\section*{Step 3. Breakpoints and $2\times3$ portfolios \normalfont\small\cite{ff15,kf}}
+Size splits at the NYSE median $\ME$. Each of $\BE/\ME$, $\OP$, $\INV$ splits at its NYSE 30th and 70th percentiles.
+Intersecting gives three independent sets of six portfolios.
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+Sort & Top 30\% & Middle 40\% & Bottom 30\% \\
+\midrule
+$\BE/\ME$ & Value ($V$) & Neutral ($N$) & Growth ($G$) \\
+$\OP$ & Robust ($R$) & Neutral ($N$) & Weak ($W$) \\
+$\INV$ & Aggressive ($A$) & Neutral ($N$) & Conservative ($C$) \\
+\bottomrule
+\end{tabular}
+\end{center}
+Each portfolio is labeled Small ($S$) or Big ($B$) plus its group, e.g.\ $SV$ = small value.
+Each label in the formulas below denotes that portfolio's value-weighted return $r_{p,t}$.
+
+\section*{Step 4. The five factors}
+
+\textbf{(1) Market} \cite{ff93}
+\begin{equation}
+\MKT_t = R^m_t-\RF_t
+\end{equation}
+$R^m_t$: value-weighted return of all stocks in the universe;\ $\RF_t$: one-month Treasury bill return.
+
+\textbf{(2) Size: Small Minus Big} \cite{ff15}
+\begin{align}
+\SMB_{B/M} &= \tfrac13(SV+SN+SG)-\tfrac13(BV+BN+BG)\\
+\SMB_{OP}  &= \tfrac13(SR+SN+SW)-\tfrac13(BR+BN+BW)\\
+\SMB_{INV} &= \tfrac13(SC+SN+SA)-\tfrac13(BC+BN+BA)\\
+\SMB &= \tfrac13\left(\SMB_{B/M}+\SMB_{OP}+\SMB_{INV}\right)
+\end{align}
+
+\textbf{(3) Value: High Minus Low book-to-market} \cite{ff15}
+\begin{equation}
+\HML = \tfrac12(SV+BV)-\tfrac12(SG+BG)
+\end{equation}
+
+\textbf{(4) Profitability: Robust Minus Weak} \cite{ff15}
+\begin{equation}
+\RMW = \tfrac12(SR+BR)-\tfrac12(SW+BW)
+\end{equation}
+
+\textbf{(5) Investment: Conservative Minus Aggressive} \cite{ff15}
+\begin{equation}
+\CMA = \tfrac12(SC+BC)-\tfrac12(SA+BA)
+\end{equation}
+
+\section*{Additional factor: momentum \normalfont\small\cite{c97,kfmom}}
+Formed monthly at the end of $t-1$; size split at NYSE median, prior-return split at NYSE 30th/70th percentiles.
+\begin{align}
+r^{\text{prior}}_{i,t} &= \prod_{s=t-12}^{t-2}(1+r_{i,s})-1 && \text{skips month } t-1\\
+\MOM_t &= \tfrac12(SH+BH)-\tfrac12(SL+BL) && H/L:\ \text{high/low prior return}
+\end{align}
+
+\begin{thebibliography}{9}\small
+\bibitem{c97} Carhart, M. M. (1997). On persistence in mutual fund performance. \emph{Journal of Finance}, 52(1), 57--82.
+\bibitem{ff93} Fama, E. F., \& French, K. R. (1993). Common risk factors in the returns on stocks and bonds. \emph{Journal of Financial Economics}, 33(1), 3--56.
+\bibitem{ff15} Fama, E. F., \& French, K. R. (2015). A five-factor asset pricing model. \emph{Journal of Financial Economics}, 116(1), 1--22.
+\bibitem{kf} French, K. R. Data Library: Fama/French 5 Factors (2x3); Variable Definitions.
+\url{https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/f-f_5_factors_2x3.html}
+\bibitem{kfmom} French, K. R. Data Library: Momentum Factor (Mom).
+\url{https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/det_mom_factor.html}
+\end{thebibliography}
+\end{document}

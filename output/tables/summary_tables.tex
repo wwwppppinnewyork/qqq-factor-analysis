@@ -1,0 +1,51 @@
+% Summary statistics tables (Tables 1-3). Usage: \input{summary_tables.tex}
+% Requires \usepackage{booktabs} and \usepackage{graphicx} in the preamble.
+
+\begin{table}[htbp]\centering\small
+\caption{Descriptive statistics of monthly returns, 1999-05 to 2026-09 (\%, monthly unless annualized)}
+\resizebox{\linewidth}{!}{\begin{tabular}{lrrrrrrrrrr}
+\toprule
+ & n & Mean & Mean (ann.) & SD & Vol (ann.) & Skewness & Excess kurtosis & Min & Max & Sharpe (ann.) \\
+\midrule
+EX\_QQQ & 329 & 0.92 & 11.01 & 6.73 & 23.33 & -0.42 & 1.66 & -26.59 & 23.88 & 0.47 \\
+EX\_SPY & 329 & 0.61 & 7.30 & 4.36 & 15.11 & -0.43 & 0.74 & -16.60 & 12.70 & 0.48 \\
+SPREAD & 329 & 0.31 & 3.71 & 3.86 & 13.38 & 0.21 & 6.33 & -16.67 & 20.55 & 0.28 \\
+MKT & 329 & 0.65 & 7.75 & 4.52 & 15.65 & -0.46 & 0.76 & -17.20 & 13.58 & 0.50 \\
+SMB & 329 & 0.20 & 2.37 & 3.13 & 10.86 & 0.40 & 4.83 & -15.53 & 18.54 & 0.22 \\
+HML & 329 & 0.14 & 1.69 & 3.45 & 11.94 & 0.18 & 2.10 & -13.83 & 12.86 & 0.14 \\
+RMW & 329 & 0.30 & 3.60 & 3.00 & 10.38 & -0.28 & 7.27 & -18.93 & 13.04 & 0.35 \\
+CMA & 329 & 0.20 & 2.44 & 2.25 & 7.79 & 0.54 & 1.64 & -7.06 & 9.00 & 0.31 \\
+MOM & 329 & 0.31 & 3.69 & 5.13 & 17.78 & -1.37 & 8.58 & -34.36 & 18.05 & 0.21 \\
+\bottomrule
+\end{tabular}}\\[3pt]
+\footnotesize\raggedright EX\_QQQ, EX\_SPY: excess returns over the risk-free rate; SPREAD $=R_{QQQ}-R_{SPY}$. Annualized mean $=12\times$ mean; annualized volatility $=\sqrt{12}\times$ SD; Sharpe $=$ annualized mean / annualized volatility.
+\end{table}
+\begin{table}[htbp]\centering\small
+\caption{Pearson correlation matrix of QQQ excess returns and the six factors}
+\begin{tabular}{lrrrrrrr}
+\toprule
+ & EX\_QQQ & MKT & SMB & HML & RMW & CMA & MOM \\
+\midrule
+EX\_QQQ & 1.00 & 0.87 & 0.22 & -0.39 & -0.55 & -0.46 & -0.23 \\
+MKT & 0.87 & 1.00 & 0.25 & -0.06 & -0.35 & -0.26 & -0.32 \\
+SMB & 0.22 & 0.25 & 1.00 & 0.08 & -0.43 & 0.03 & -0.04 \\
+HML & -0.39 & -0.06 & 0.08 & 1.00 & 0.36 & 0.63 & -0.21 \\
+RMW & -0.55 & -0.35 & -0.43 & 0.36 & 1.00 & 0.28 & 0.00 \\
+CMA & -0.46 & -0.26 & 0.03 & 0.63 & 0.28 & 1.00 & 0.03 \\
+MOM & -0.23 & -0.32 & -0.04 & -0.21 & 0.00 & 0.03 & 1.00 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{table}[htbp]\centering\small
+\caption{Mean and standard deviation of monthly returns by Crisis tercile (\%)}
+\resizebox{\linewidth}{!}{\begin{tabular}{lrrrrrr}
+\toprule
+state & EX\_QQQ mean & EX\_QQQ std & EX\_SPY mean & EX\_SPY std & MKT mean & MKT std \\
+\midrule
+Calm (low) & 0.80 & 6.04 & 0.50 & 3.56 & 0.44 & 3.70 \\
+Middle & 1.30 & 5.42 & 1.00 & 3.69 & 1.07 & 3.86 \\
+Bearish (high) & 0.65 & 8.40 & 0.32 & 5.55 & 0.43 & 5.72 \\
+\bottomrule
+\end{tabular}}\\[3pt]
+\footnotesize\raggedright Crisis $=-z(\mathrm{Past24})$, where Past24 is the cumulative market return over months $t-24$ to $t-1$ (Daniel \& Moskowitz, 2016). Higher Crisis means a weaker past market.
+\end{table}
